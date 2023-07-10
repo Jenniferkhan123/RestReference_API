@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "507a0dcc-8bd1-47dd-b4e8-9e14bf0d758c",
+		"name": "RestReference_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27083534"
+	},
+	"item": [
+		{
+			"name": "Put TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Step 1 : Validate the status code \r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Step2 :Declare expected results\r",
+							"//Step2.1 : Fetch data from request \r",
+							"var requestBody = pm.request.body.raw;\r",
+							"requestBody=JSON.parse(requestBody);\r",
+							"var req_name=requestBody.name;\r",
+							"var req_job=requestBody.job;\r",
+							"\r",
+							"//Step2.2: Generate date in required format\r",
+							"//var actualdate= new Date().toJSON().slice(0,13);\r",
+							"var actualdate= new Date().toISOString().slice(0,13);\r",
+							"\r",
+							"//Step 3 : Validate Response Body \r",
+							"//Step 3.1 : Extract response body \r",
+							"var responseBody = pm.response.json();\r",
+							"//Step 3.2 : Extract response body parameters \r",
+							"var res_name = responseBody.name;\r",
+							"var res_job= responseBody.job;\r",
+							"var res_updatedAt=responseBody.updatedAt;\r",
+							"res_updatedAt=res_updatedAt.slice(0,13);\r",
+							"\r",
+							"//Step 3.3 : Validate response body\r",
+							"pm.test(\"Validate Response Body Parameter Name\", function() {\r",
+							"    pm.expect(res_name).to.eql(req_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Job\", function() {\r",
+							"    pm.expect(res_job).to.eql(req_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Date\", function() {\r",
+							"    pm.expect(res_updatedAt).to.eql(actualdate);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//Declare the request body\r",
+							"//fetch data from request body\r",
+							"var requestbody=pm.request.body.raw;\r",
+							"requestbody=JSON.parse(requestbody);\r",
+							"//fetch the request parameters\r",
+							"var req_name = requestbody.name;\r",
+							"var req_job=requestbody.job;\r",
+							"// Generate date in required format\r",
+							"var actualdate = new Date().toJSON().slice(0,10);\r",
+							"//Vallidate the response body\r",
+							"// extract data from response body\r",
+							"var responsebody =pm.response.json();\r",
+							"var res_name=responsebody.name;\r",
+							"var res_job= responsebody.job;\r",
+							"var res_id=responsebody.id;\r",
+							"var res_createdAt=responsebody.createdAt;\r",
+							"res_createdAt=res_createdAt.slice(0,10);\r",
+							"\r",
+							"pm.test(\"Validate the responsebody parameter,Name\",function(){\r",
+							"    pm.expect(req_name).to.eql(res_name);\r",
+							"});\r",
+							" \r",
+							"pm.test(\"Validate the parameter job\",function() {\r",
+							"     pm.expect(req_job).to.eql(res_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the responsebody parametes id\", function() {\r",
+							"     pm.expect(res_id).to.not.eql(0);\r",
+							"     pm.expect(res_id).to.not.null;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate responsebody partameter,actualdate\",function() {\r",
+							"    pm.expect(res_createdAt).to.eql(actualdate);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post_Regis_Successfull",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var id = pm.collectionVariables.replaceIn('{{$randomID}}');\r",
+							"pm.collectionVariables.set(\"Coll_ID\",id);\r",
+							"\r",
+							"var job=pm.variables.replaceIn('{{$randomPassword}}');\r",
+							"//pm.collectionVariables.set(\"Coll_password\",password);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Extract the response body parameters \r",
+							"var requestbody = pm.request.body.raw;\r",
+							" var requestbody=JSON.parse(requestbody);\r",
+							"var req_email=requestbody.email;\r",
+							"var req_password =requestbody.password;\r",
+							"console.log(requestbody);\r",
+							"var responsebody=pm.response.json();\r",
+							"var res_id=responsebody.id;\r",
+							"var res_token=responsebody.token;\r",
+							"console.log(responsebody);\r",
+							"\r",
+							"//Validate responsebody\r",
+							"\r",
+							"pm.test(\"Validate the responsebody parameter,ID\",function() {\r",
+							"    pm.expect(res_id).to.eql(4); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the responsebody parameter,token\",function() {\r",
+							"    //pm.expect(res_token).to.eql.not.null;\r",
+							"   // pm.expect(res_token).to.eql(0);\r",
+							"    pm.expect(res_token).to.eql(\"QpwL5tke4Pnpja7X4\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"pistol\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/register",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Step 1 : Validate the status code \r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Step2 :Declare expected results\r",
+							"//Step2.1 : Fetch data from request \r",
+							"var requestBody = pm.request.body.raw;\r",
+							"requestBody=JSON.parse(requestBody);\r",
+							"var req_name=requestBody.name;\r",
+							"var req_job=requestBody.job;\r",
+							"\r",
+							"//Step2.2: Generate date in required format\r",
+							"//var actualdate= new Date().toJSON().slice(0,13);\r",
+							"var actualdate= new Date().toISOString().slice(0,13);\r",
+							"\r",
+							"//Step 3 : Validate Response Body \r",
+							"//Step 3.1 : Extract response body \r",
+							"var responseBody = pm.response.json();\r",
+							"//Step 3.2 : Extract response body parameters \r",
+							"var res_name = responseBody.name;\r",
+							"var res_job= responseBody.job;\r",
+							"var res_updatedAt=responseBody.updatedAt;\r",
+							"res_updatedAt=res_updatedAt.slice(0,13);\r",
+							"\r",
+							"//Step 3.3 : Validate response body\r",
+							"pm.test(\"Validate Response Body Parameter Name\", function() {\r",
+							"    pm.expect(res_name).to.eql(req_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Job\", function() {\r",
+							"    pm.expect(res_job).to.eql(req_job);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate Response Body Parameter Date\", function() {\r",
+							"    pm.expect(res_updatedAt).to.eql(actualdate);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"zion resident\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get TC1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/unknown/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Coll_ID",
+			"value": ""
+		}
+	]
+}
